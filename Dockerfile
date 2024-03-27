@@ -28,12 +28,12 @@ RUN docker-php-ext-install gettext intl pdo_mysql gd
 RUN docker-php-ext-configure gd --enable-gd --with-freetype --with-jpeg \
     && docker-php-ext-install -j$(nproc) gd
 
-# Install Laravel and Laravel Breeze
-RUN composer global require laravel/installer
-ENV PATH="${PATH}:/root/.composer/vendor/bin"
-RUN composer create-project --prefer-dist laravel/laravel .
-RUN composer require laravel/breeze --dev
-RUN php artisan breeze:install
+# # Install Laravel and Laravel Breeze
+# RUN composer global require laravel/installer
+# ENV PATH="${PATH}:/root/.composer/vendor/bin"
+# RUN composer create-project --prefer-dist laravel/laravel .
+# RUN composer require laravel/breeze --dev
+# RUN php artisan breeze:install
 
 # Ensure proper permissions
 RUN chown -R www-data:www-data /var/www/html
