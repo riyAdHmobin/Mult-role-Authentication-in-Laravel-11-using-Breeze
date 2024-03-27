@@ -9,6 +9,16 @@ services:
       - ./laravel-app:/var/www/html
     ports:
       - 8002:80
+    depends_on:
+      - mysql_db
+      - nodejs
+    environment:
+      DB_CONNECTION: mysql
+      DB_HOST: mysql_db
+      DB_PORT: 3306
+      DB_DATABASE: multi-role-auth-laravel-11-using-breeze
+      DB_USERNAME: root
+      DB_PASSWORD: root
     
   mysql_db:
     image: mysql:latest
@@ -24,3 +34,8 @@ services:
       - 8003:80
     environment:
       - PMA_ARBITRARY=1
+
+  nodejs:
+    image: node:latest
+    volumes:
+      - ./laravel-app:/var/www/html

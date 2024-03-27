@@ -15,7 +15,9 @@ RUN apt-get update -y && apt-get install -y \
     libjpeg-dev \
     libfreetype6-dev \
     libjpeg62-turbo-dev \
-    libpng-dev 
+    libpng-dev \
+    nodejs \
+    npm
 
 # Install Composer
 COPY --from=composer:latest /usr/bin/composer /usr/bin/composer
@@ -25,3 +27,17 @@ RUN docker-php-ext-install gettext intl pdo_mysql gd
 
 RUN docker-php-ext-configure gd --enable-gd --with-freetype --with-jpeg \
     && docker-php-ext-install -j$(nproc) gd
+
+# Install Laravel and Laravel Breeze
+RUN composer global require laravel/installer
+ENV PATH="${PATH}:/root/.composer/vendor/bin"
+RUN composer create-project --prefer-dist laravel/laravel .
+RUN composer require laravel/breeze --dev
+RUN php artisan breeze:install
+
+# Ensure proper permissions
+RUN chown -R www-data:www-data /var/www/html
+
+# Verify Node.js and npm installation
+RUN node -v
+RUN npm -v
